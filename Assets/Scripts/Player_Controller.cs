@@ -5,20 +5,26 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
 {
-    public Camera PCam;
-    public int speed = 0;
-    [SerializeField]
-    private int health = 0;
-    private Rigidbody rb;
+    [Header("Object References")]
+    public Camera playerCamera;
+    private float yOffset = 0;
+    private float zOffset = 0;
 
-    float XVel = 0;
-    float ZVel = 0;
+    [Header("Player Variables")] 
+    public int speed = 0;
+    public int health = 0;
+    private Rigidbody rb;  
+    private float XVel = 0;
+    private float ZVel = 0;
 
     
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+
+        yOffset = gameObject.transform.position.y - playerCamera.transform.position.y;
+        zOffset = gameObject.transform.position.z - playerCamera.transform.position.z;
         
     }
 
@@ -28,12 +34,15 @@ public class Player_Controller : MonoBehaviour
         XVel = Input.GetAxis("Horizontal") * speed;
         ZVel = Input.GetAxis("Vertical") * speed;
 
-        rb.velocity = new Vector3(XVel, 0, ZVel);
-        
+    }
+
+    private void FixedUpdate() {
+        rb.velocity = new Vector3(XVel, rb.velocity.y, ZVel);
+
     }
 
     void LateUpdate() {
-        PCam.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 7, gameObject.transform.position.z - 3);
+        playerCamera.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - yOffset, gameObject.transform.position.z - zOffset);
 
     }
 }
