@@ -53,6 +53,7 @@ public class Player_Controller : MonoBehaviour
 
     // Adjust both cameras positions after the player's position has been updated
     void LateUpdate() {
+        // Utilize the camera offset variables to update the camera's position relative to the player
         var playerPosition = transform.position;
         playerCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y - CamYOffset, playerPosition.z - CamZOffset);
         miniMapCamera.transform.position = new Vector3(playerPosition.x, miniMapCamera.transform.position.y, playerPosition.z);
@@ -69,9 +70,8 @@ public class Player_Controller : MonoBehaviour
                 gameController.YouLose();
                 Time.timeScale = 0;
             }
-            // Update the healthbar to new health value
+            // Update the healthbar to the new health value
             UpdateHealthBar(health);
-
             return;
         }
     }
@@ -87,7 +87,7 @@ public class Player_Controller : MonoBehaviour
             // Particles will burst out of the pickup
             Instantiate(healthParticles, other.transform.position, other.transform.rotation);
 
-            // Destroy the health pickup after health has been absorbed
+            // The health pickup is destroyed
             Destroy(other.gameObject);
 
             // Make sure the new health value does not exceed the player's total health
@@ -97,15 +97,15 @@ public class Player_Controller : MonoBehaviour
 
             // Update the healthbar to reflect the player's new health value
             UpdateHealthBar(health);
-
             return;
         }
 
         // The player has reached the finish line
         if (other.gameObject.CompareTag("Finish")) {
-            // Run win sequence
+            // Run win sequence in the game controller
             gameController.YouWin();
             Time.timeScale = 0;
+            return;
         }
     }
 
