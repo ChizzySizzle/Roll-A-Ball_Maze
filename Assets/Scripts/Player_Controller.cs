@@ -59,6 +59,7 @@ public class Player_Controller : MonoBehaviour
         miniMapCamera.transform.position = new Vector3(playerPosition.x, miniMapCamera.transform.position.y, playerPosition.z);
     }
 
+    // Deplete player health and update healthbar when player collides with a wall
     private void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Wall")) {
             
@@ -68,6 +69,7 @@ public class Player_Controller : MonoBehaviour
             // Checking to see if the player has died
             if (health <= 0) {
                 gameController.YouLose();
+                // Freeze time to stop player from moving any further
                 Time.timeScale = 0;
             }
             // Update the healthbar to the new health value
@@ -76,6 +78,8 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
+    // If the player has collided with health, adjust player health and update health bar
+    // If the player has collided with the finish line, freeze time and run the win sequence
     private void OnTriggerEnter(Collider other) {
 
         // The player has collided with a health pickup
@@ -104,6 +108,7 @@ public class Player_Controller : MonoBehaviour
         if (other.gameObject.CompareTag("Finish")) {
             // Run win sequence in the game controller
             gameController.YouWin();
+            // Freeze time to stop player from moving any further
             Time.timeScale = 0;
             return;
         }
